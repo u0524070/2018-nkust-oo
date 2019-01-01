@@ -17,4 +17,18 @@
 我們會利用python語言來進行爬蟲，利用python的套件來抓取中華民國證券投資暨顧問商業同業公會的網站資料，並將資料存入MySQL資料庫，再將其整理並進行分析，
 最後再將分析結果以網站呈現。
 # 專題內容簡介:
+### 系統簡介
 <img src="pic/info.png" width="550">
+### 利害關係人目標表 
+<img src="pic/PeopleGoalChart.png" width="550">
+### 事件表
+<img src="pic/EventChart.png" width="550">
+### 使用案例
+<img src="pic/UseCase1.png" width="550">
+<img src="pic/UseCase2.png" width="550">
+<img src="pic/UseCase3.png" width="550">
+### 使用案例圖
+<img src="pic/UseCasePic.png" width="550">
+### 系統活動圖
+<img src="pic/ActivityChart.png" width="550">
+<img src="pic/ActivityChart1.png" width="550">
