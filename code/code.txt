@@ -1,0 +1,205 @@
+from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+import time
+from bs4 import BeautifulSoup
+import pymssql
+
+
+chrome_path='C:\\Users\\admin\\Desktop\\專題\\chromedriver.exe'
+browser = webdriver.Chrome(chrome_path)
+browser.get("http://www.sitca.org.tw/ROC/Industry/IN2629.aspx?pid=IN22601_04")
+#開啟chrome到目標網頁
+conn=pymssql.connect(host='163.18.42.30',user='root',password='1234',database='fund',charset='utf8')
+cursor=conn.cursor()
+#連結資料庫
+
+time.sleep(3)        
+
+combobox_time=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_YM"))
+c_tLen=len(combobox_time.options)
+#combobox年月
+combobox_company=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_Comid1"))
+c_cLen=len(combobox_company.options)
+#combobox公司
+for A in range(c_tLen):
+    combobox_time=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_YM"))
+    combobox_time.select_by_index(A)#
+    time.sleep(5)
+    combobox_time=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_YM"))
+    yearmonth=combobox_time.first_selected_option.text
+    print(yearmonth+'\n')
+    for B in range(c_cLen):
+        radio=browser.find_element_by_id("ctl00_ContentPlaceHolder1_rbComCL")
+        radio.click()
+        #radio公司+類型選取
+        combobox_stuck=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_Class1"))
+        combobox_stuck.select_by_index(1)
+        #combobox國內股票型選取
+        combobox_company=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_Comid1"))
+        combobox_company.select_by_index(B)#
+        company=combobox_company.first_selected_option.text
+        print(company)
+        #combobox公司選取
+        button_query=browser.find_element_by_id("ctl00_ContentPlaceHolder1_BtnQuery")
+        button_query.click()
+        #button查詢點擊
+        time.sleep(5)
+        bs = BeautifulSoup(browser.page_source)
+        #取得網頁資訊
+       
+        tr=bs.find_all('table')[3].find_all('tr')
+        goal=[]
+        data=[]
+        row=[]
+        for i in range(1,len(tr)):
+            td=tr[i].find_all('td')
+            for m in range(len(td)):
+                if(len(td)==10):
+                    if(m!=6 and m!=7 and m!=8):
+                        goal.append(td[m].text)
+                elif(len(td)==9):
+                    if(m!=5 and m!=6 and m!=7):
+                        goal.append(td[m].text)
+            for j in range(len(td)):
+                rowspan=td[j].get("rowspan")
+                if(rowspan!=None):
+                    row.append(int(rowspan))
+        count=0
+        Gjin=[]
+        for i in range(len(row)):
+            data.append([])
+            Gjin.append(goal[count])
+            for j in range(row[i]*6):
+                count+=1
+                data[i].append([])
+                data[i][j].append(goal[count])
+            count+=1
+        #print(data)
+        dic={}
+        count=3
+        dic['0']=yearmonth
+        dic['1']=company
+        for i in range(len(data)):
+            for j in range(row[i]*6):
+                dic['2']=Gjin[i]  
+                dic[str(count)]=data[i][j]
+                count+=1
+                if(count==9):
+                    count=3
+                    sql="insert into fund values(%(0)s,%(1)s,%(2)s,%(3)s,%(4)s,%(5)s,%(6)s,%(7)s,%(8)s)"
+                    cursor.execute(sql,dic)
+                    conn.commit()
+
+        #存入資料庫
+
+
+        cursor.execute("select * from fund")
+        #存入資料庫
+        for row in cursor.fetchall():
+            print(row)
+
+
+        print('\n')
+        time.sleep(1)from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+import time
+from bs4 import BeautifulSoup
+import pymssql
+
+
+chrome_path='C:\\Users\\admin\\Desktop\\專題\\chromedriver.exe'
+browser = webdriver.Chrome(chrome_path)
+browser.get("http://www.sitca.org.tw/ROC/Industry/IN2629.aspx?pid=IN22601_04")
+#開啟chrome到目標網頁
+conn=pymssql.connect(host='163.18.42.30',user='root',password='1234',database='fund',charset='utf8')
+cursor=conn.cursor()
+#連結資料庫
+
+time.sleep(3)        
+
+combobox_time=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_YM"))
+c_tLen=len(combobox_time.options)
+#combobox年月
+combobox_company=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_Comid1"))
+c_cLen=len(combobox_company.options)
+#combobox公司
+for A in range(c_tLen):
+    combobox_time=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_YM"))
+    combobox_time.select_by_index(A)#
+    time.sleep(5)
+    combobox_time=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_YM"))
+    yearmonth=combobox_time.first_selected_option.text
+    print(yearmonth+'\n')
+    for B in range(c_cLen):
+        radio=browser.find_element_by_id("ctl00_ContentPlaceHolder1_rbComCL")
+        radio.click()
+        #radio公司+類型選取
+        combobox_stuck=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_Class1"))
+        combobox_stuck.select_by_index(1)
+        #combobox國內股票型選取
+        combobox_company=Select(browser.find_element_by_id("ctl00_ContentPlaceHolder1_ddlQ_Comid1"))
+        combobox_company.select_by_index(B)#
+        company=combobox_company.first_selected_option.text
+        print(company)
+        #combobox公司選取
+        button_query=browser.find_element_by_id("ctl00_ContentPlaceHolder1_BtnQuery")
+        button_query.click()
+        #button查詢點擊
+        time.sleep(5)
+        bs = BeautifulSoup(browser.page_source)
+        #取得網頁資訊
+       
+        tr=bs.find_all('table')[3].find_all('tr')
+        goal=[]
+        data=[]
+        row=[]
+        for i in range(1,len(tr)):
+            td=tr[i].find_all('td')
+            for m in range(len(td)):
+                if(len(td)==10):
+                    if(m!=6 and m!=7 and m!=8):
+                        goal.append(td[m].text)
+                elif(len(td)==9):
+                    if(m!=5 and m!=6 and m!=7):
+                        goal.append(td[m].text)
+            for j in range(len(td)):
+                rowspan=td[j].get("rowspan")
+                if(rowspan!=None):
+                    row.append(int(rowspan))
+        count=0
+        Gjin=[]
+        for i in range(len(row)):
+            data.append([])
+            Gjin.append(goal[count])
+            for j in range(row[i]*6):
+                count+=1
+                data[i].append([])
+                data[i][j].append(goal[count])
+            count+=1
+        #print(data)
+        dic={}
+        count=3
+        dic['0']=yearmonth
+        dic['1']=company
+        for i in range(len(data)):
+            for j in range(row[i]*6):
+                dic['2']=Gjin[i]  
+                dic[str(count)]=data[i][j]
+                count+=1
+                if(count==9):
+                    count=3
+                    sql="insert into fund values(%(0)s,%(1)s,%(2)s,%(3)s,%(4)s,%(5)s,%(6)s,%(7)s,%(8)s)"
+                    cursor.execute(sql,dic)
+                    conn.commit()
+
+        #存入資料庫
+
+
+        cursor.execute("select * from fund")
+        #存入資料庫
+        for row in cursor.fetchall():
+            print(row)
+
+
+        print('\n')
+        time.sleep(1)
