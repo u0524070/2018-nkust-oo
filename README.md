@@ -36,3 +36,10 @@
 ### 系統活動圖
 <img src="pic/ActivityChart.png" width="550">
 <img src="pic/ActivityChart1.png" width="550">
+### 系統循序圖
+<img src="pic/process1.png" width="550">
+<img src="pic/process2.png" width="550">
+### 系統類別圖
+<img src="pic/class.png" width="550">
+### 測試計畫
+<img src="pic/testproject.png" width="550">
