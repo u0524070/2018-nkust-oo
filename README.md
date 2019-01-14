@@ -45,4 +45,4 @@
 <img src="pic/class.png" width="550">
 
 ### 測試計畫
-<img src="pic/testproject.png" width="550">
+<img src="pic/testprojects.png" width="550">
